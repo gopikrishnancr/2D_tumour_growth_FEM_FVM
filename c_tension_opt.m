@@ -1,0 +1,9 @@
+function [Ax,Mx,Dx] = c_tension_opt(elem_ar,v_al,pr_grad,mat_mass,ot,PElem,Q,Q1_hat)
+n_elem = length(elem_ar);
+new_domain = elem_ar;
+al_array = v_al(elem_ar);
+c_mean  = sum(ot(PElem(elem_ar,1:3)),2)/3;
+cf = -Q*al_array./(1 + Q1_hat*c_mean);
+Ax = reshape(bsxfun(@times,mat_mass(:,:,new_domain),reshape(cf',1,1,n_elem)),1,9*n_elem);
+Mx = reshape(mat_mass(:,:,new_domain),1,9*n_elem);
+Dx = reshape(pr_grad(:,:,new_domain),1,9*n_elem);
